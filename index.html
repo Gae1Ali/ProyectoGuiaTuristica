@@ -1,43 +1,61 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Guía Turística Movil</title>
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <link rel="stylesheet" href="styles.css">
-  <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+ <meta charset="UTF-8">
+ <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ <title>Guía Turística Movil</title>
+ <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+ <link rel="stylesheet" href="styles.css">
+ <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
 </head>
 <body>
+   <style>
+        .leaflet-popup-content-wrapper img {
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        .leaflet-popup-content {
+            text-align: center;
+        }
+    </style>
 
-<!-- Header / Menú -->
 <header>
-  <h1>Guía Turística Movil</h1>
-  <nav>
-    <ul>
+ <h1>Guía Turística Movil</h1>
+ <nav>
+   <ul>
       <li><a href="#inicio">Inicio</a></li>
       <li><a href="#lugares">Lugares</a></li>
-      <li><a href="#mapa">Mapa</a></li>
-      <li><a href="#contacto">Contacto</a></li>
-    </ul>
+     <li><a href="#mapa">Mapa</a></li>
+     <li><a href="#contacto">Contacto</a></li>
+   </ul>
   </nav>
 </header>
 
-<!-- Sección principal -->
 <section id="inicio" class="hero">
   <h2>¡Explora la magia de Colima!</h2>
-  <p>Descubre playas, volcanes y pueblos mágicos.</p>
-  <button class="btn-primary" onclick="mostrarBusqueda()">Explorar ahora</button>
+   <p>Descubre playas, volcanes y pueblos mágicos.</p>
+   <button class="btn-primary" onclick="mostrarSeccion('municipios')">Explorar ahora</button>
 </section>
 
-<!-- Sección de búsqueda -->
-<section id="busqueda" style="display:none;">
-  <h3>¿A dónde quieres viajar en Colima?</h3>
-  <input type="text" id="destinoInput" placeholder="Ej. Comala, Manzanillo">
-  <button class="small-btn" onclick="mostrarResultados()">Buscar</button>
+<section id="municipios">
+  <h3>¿Qué te gustaría visitar hoy?</h3>
+  <div class="municipio-buttons">
+    <button onclick="mostrarContenidoMunicipio('Colima')">Colima</button>
+    <button onclick="mostrarContenidoMunicipio('Villa de Álvarez')">Villa de Álvarez</button>
+    <button onclick="mostrarContenidoMunicipio('Comala')">Comala</button>
+    <button onclick="mostrarContenidoMunicipio('Coquimatlán')">Coquimatlán</button>
+    <button onclick="mostrarContenidoMunicipio('Cuauhtémoc')">Cuauhtémoc</button>
+    <button onclick="mostrarContenidoMunicipio('Ixtlahuacán')">Ixtlahuacán</button>
+    <button onclick="mostrarContenidoMunicipio('Manzanillo')">Manzanillo</button>
+    <button onclick="mostrarContenidoMunicipio('Minatitlán')">Minatitlán</button>
+    <button onclick="mostrarContenidoMunicipio('Tecomán')">Tecomán</button>
+     <button onclick="mostrarContenidoMunicipio('Armería')">Armería</button>
+  </div>
+  <div id="contenido-municipio">
+      </div>
 </section>
 
-<!-- Sección de lugares turísticos -->
 <section id="lugares">
   <h3>Lugares turísticos destacados</h3>
 
@@ -69,7 +87,7 @@
     <button class="small-btn" onclick="reservarServicio('Jardín Libertad')">Reservar</button>
   </div>
 
-  <div class="card">
+ <div class="card">
     <strong>Playa El Paraíso</strong><br>
     ⭐⭐⭐⭐☆<br>
     Una playa tranquila para relajarte.<br>
@@ -78,70 +96,17 @@
 
 </section>
 
-<!-- Sección de mapa -->
 <section id="mapa">
-  <h3>Mapa interactivo de Colima</h3>
-  <div id="map" style="height: 400px; border-radius: 8px;"></div>
+ <h3>Mapa interactivo de Colima</h3>
+ <div id="map" style="height: 400px; border-radius: 8px;"></div>
 </section>
 
-<!-- Footer / Contacto -->
 <footer id="contacto" class="footer">
-  <p>© 2025 Guía Turística Movil</p>
-  <p>Siguenos en: Facebook | Instagram | TikTok</p>
+ <p>© 2025 Guía Turística Movil</p>
+ <p>Siguenos en: Facebook | Instagram | TikTok |</p>
 </footer>
 
-<!-- Script principal -->
-<script>
-function mostrarBusqueda() {
-  document.getElementById('busqueda').style.display = 'block';
-}
-
-function mostrarResultados() {
-  const destino = document.getElementById('destinoInput').value.trim();
-  if (destino) {
-    alert('Mostrando resultados para: ' + destino);
-  } else {
-    alert('Por favor ingresa un destino válido.');
-  }
-}
-
-function reservarServicio(servicio) {
-  alert('¡Reserva exitosa para ' + servicio + '! Te enviaremos los detalles a tu correo.');
-}
-
-var map = L.map('map').setView([19.2450, -103.7241], 10);
-L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-  attribution: '&copy; OpenStreetMap contributors'
-}).addTo(map);
-
-// Función para crear el contenido de los popups
-function crearPopup(nombre, imagen, estrellas) {
-  return `
-    <div style="text-align: center;">
-      <strong>${nombre}</strong><br>
-      <img src="${imagen}" alt="${nombre}" style="width:100px; height:auto; border-radius:8px; margin:5px 0;"><br>
-      ${estrellas}
-    </div>
-  `;
-}
-
-// Marcadores
-L.marker([19.0622, -104.3386]).addTo(map)
-  .bindPopup(crearPopup('Playa de Oro', 'playa-oro.jpg', '⭐⭐⭐⭐☆'));
-
-L.marker([19.2792, -103.7995]).addTo(map)
-  .bindPopup(crearPopup('Comala Pueblo Mágico', 'comala.jpg', '⭐⭐⭐⭐⭐'));
-
-L.marker([19.5145, -103.6208]).addTo(map)
-  .bindPopup(crearPopup('Volcán de Colima', 'volcan-colima.jpg', '⭐⭐⭐⭐☆'));
-
-L.marker([19.2433, -103.7250]).addTo(map)
-  .bindPopup(crearPopup('Jardín Libertad', 'jardin-libertad.jpg', '⭐⭐⭐⭐☆'));
-
-L.marker([19.0432, -104.3733]).addTo(map)
-  .bindPopup(crearPopup('Playa El Paraíso', 'playa-paraiso.jpg', '⭐⭐⭐⭐☆'));
-
-</script>
+<script src="script.js"></script>
 
 </body>
 </html>
